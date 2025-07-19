@@ -22,13 +22,14 @@
 
   <script>
     const answerChoices = [
-      "A. Does not use commercial cleaning products",
-      "B. Give away used items",
-      "C. Buy environmentally friendly products",
-      "D. Reuse containers for storing food",
-      "E. Always walks instead of driving to protect nature"
+      "Does not use commercial cleaning products",
+      "Give away used items",
+      "Buy environmentally friendly products",
+      "Reuse containers for storing food",
+      "Always walks instead of driving to protect nature"
     ];
     const correctAnswers = ["A", "B", "C", "D"];
+    const correctTexts = [answerChoices[0], answerChoices[1], answerChoices[2], answerChoices[3]];
     const transcripts = [
       "Speaker 1: I find the act of giving away old or secondhand items a bit hypocritical. Why do people give away their old things, only to go out and buy the same item but brand new? Not only does this fail to protect the environment, but it also causes double the harm. Personally, I have a way of protecting the environment by not releasing harmful chemicals into it. I do this by not purchasing chemical cleaning solutions. Instead, I make use of natural products like lemons to create my own floor-cleaning solutions.",
       "Speaker 2: I often don't have time to think about how to reuse my belongings or clothes, but I don't want to throw them away because that would be wasteful. So, I think a better way is to donate them to charity organizations or give them to others. Many people are in need of these things, and giving away my old items also makes me feel happier because I'm helping others.",
@@ -91,12 +92,21 @@
   <div id="result" class="result" style="display:none;"></div>
 
   <script>
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
     const selects = document.querySelectorAll("select");
     selects.forEach(select => {
-      answerChoices.forEach((choice, index) => {
+      const shuffled = [...answerChoices];
+      shuffleArray(shuffled);
+      shuffled.forEach(choice => {
         const option = document.createElement("option");
-        option.value = String.fromCharCode(65 + index);
-        option.textContent = choice; // Hiển thị nội dung đáp án
+        option.value = choice;
+        option.textContent = choice;
         select.add(option);
       });
     });
@@ -118,12 +128,12 @@
       let output = "<h2>Kết quả</h2>";
       selects.forEach((select, i) => {
         const userAnswer = select.value;
-        const correctAnswer = correctAnswers[i];
-        const status = userAnswer === correctAnswer ? "✅ <span class='correct'>Đúng</span>" : "❌ <span class='incorrect'>Sai</span>";
-        if (userAnswer === correctAnswer) correct++;
+        const correctText = correctTexts[i];
+        const status = userAnswer === correctText ? "✅ <span class='correct'>Đúng</span>" : "❌ <span class='incorrect'>Sai</span>";
+        if (userAnswer === correctText) correct++;
         output += `<p><strong>Người nói ${i+1}:</strong> ${status}<br>
         Câu bạn chọn: ${userAnswer}<br>
-        Đáp án đúng: ${correctAnswer}<br>
+        Đáp án đúng: ${correctText}<br>
         <em>Transcript: ${transcripts[i]}</em></p>`;
         select.disabled = true;
       });
